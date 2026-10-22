@@ -119,7 +119,6 @@ private lemma pack_unpack_bv (bv : BitVec 32) (h : Float.Model.Format.binary32.V
                Float.Model.UnpackedFloat.packComponents, sign_ofBitVec_toBitVec,
                Float.Model.UnpackedFloat.unpackSign, Float.Model.UnpackedFloat.unpackExponent,
                Float.Model.UnpackedFloat.unpackMantissa, Float.Model.Format.binary32] at h1 h2 ⊢
-    dsimp only at h1 h2 ⊢
     bv_decide
   · -- exponent all-ones, mantissa ≠ 0 → NaN; validity forces bv = canonical NaN
     exact (h.eq_packedNaN h1 h2).symm
@@ -128,7 +127,6 @@ private lemma pack_unpack_bv (bv : BitVec 32) (h : Float.Model.Format.binary32.V
                Float.Model.UnpackedFloat.packComponents, sign_ofBitVec_toBitVec,
                Float.Model.UnpackedFloat.unpackSign, Float.Model.UnpackedFloat.unpackExponent,
                Float.Model.UnpackedFloat.unpackMantissa, Float.Model.Format.binary32] at h3 h4 ⊢
-    dsimp only at h3 h4 ⊢
     bv_decide
   · -- exponent 0, mantissa ≠ 0 → subnormal finite (model exponent -149)
     have hm : (@Float.Model.UnpackedFloat.unpackMantissa Float.Model.Format.binary32 bv).toNat
