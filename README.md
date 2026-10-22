@@ -1,8 +1,46 @@
-# TensorLib
+# TensorLib-MLIR
+
+TensorLib-MLIR is a transpiler for [TensorLib](https://github.com/leanprover/TensorLib) to MLIR.
+
+It is intended to be invoked on existing TensorLib code and emit MLIR.
+
+For example, given the following Lean code:
+
+```lean
+let t1 := (Tensor.ofFloat32List! [1.0, 2.0, 3.0, 4.0]).reshape! (Shape.mk [2, 2])
+let t2 := (Tensor.ofFloat32List! [5.0, 6.0, 7.0, 8.0]).reshape! (Shape.mk [2, 2])
+
+let t3 <- match matmul2 t1 t2 with
+  | .ok result => pure result
+  | .error msg => throw (IO.userError msg)
+```
+
+The intended output would resemble the following MLIR (illustrative, not yet
+able to generate such code.):
+
+```mlir
+%A = arith.constant dense<[[1.0, 2.0], [3.0, 4.0]]> : tensor<2x2xf32>
+%B = arith.constant dense<[[5.0, 6.0], [7.0, 8.0]]> : tensor<2x2xf32>
+%C = arith.constant dense<0.0> : tensor<2x2xf32>
+
+%result = linalg.matmul
+    ins(%A, %B : tensor<2x2xf32>, tensor<2x2xf32>)
+    outs(%C : tensor<2x2xf32>) -> tensor<2x2xf32>
+```
+
+## State of the project
+
+Early development: investigating Lean compiler representations and MLIR lowering.
+
+Currently in progress by @handel-fan.
+
+
+
+## About TensorLib
 
 TensorLib is a numerical computing library in Lean4 that provides NumPy-like multidimensional tensors, numerical data types, and tensor operations. A primary goal of TensorLib is to provide a foundation for verified numerical computing.
 
-In addition to providing executable tensor computations, TensorLib is icludes support to formally reasoning about numerical programs. By representing tensor operations directly in Lean, TensorLib makes it possible to state and prove properties about data types, numerical operations, and mixed-precision computations within the same system in which the computations are defined.
+In addition to providing executable tensor computations, TensorLib includes support for formally reasoning about numerical programs. By representing tensor operations directly in Lean, TensorLib makes it possible to state and prove properties about data types, numerical operations, and mixed-precision computations within the same system in which the computations are defined.
 
 ## Features
 
@@ -41,7 +79,6 @@ TensorLib supports a range of integer and floating-point formats.
 * `uint16`
 * `uint32`
 * `uint64`
-* `int64`
 
 ### Floating-point types
 
@@ -50,20 +87,24 @@ TensorLib supports a range of integer and floating-point formats.
 * `float8_e4m3`
 * `float8_e5m2`
 * `float8_e8m0`
-* float16`
+* `float16`
 * `bfloat16`
 * `float32`
 * `float64`
 
 ## Installation
 
-If Lean is installed using `elan`, cloning the repository will automatically select the Lean version specified by the project.
+If Lean is installed using `elan`, cloning the repository will select the Lean version specified by the project.
+
+To build this fork:
 
 ```bash
-git clone https://github.com/leanprover/TensorLib.git
-cd TensorLib
+git clone https://github.com/handel-fan/Tensorlib-MLIR.git
+cd Tensorlib-MLIR
 lake build
 ```
+
+For the original TensorLib library, see [upstream TensorLib](https://github.com/leanprover/TensorLib).
 
 ## Basic usage
 
