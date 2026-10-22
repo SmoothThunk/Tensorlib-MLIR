@@ -65,7 +65,6 @@ def _root_.Float32.isNegInf (f : Float32) : Bool := f == Float32.ofBits 0xFF8000
 def _root_.Float.isPosInf (f : Float) : Bool := f == Float.ofBits 0x7FF0000000000000
 def _root_.Float.isNegInf (f : Float) : Bool := f == Float.ofBits 0xFFF0000000000000
 
-def _root_.Int.toFloat32 (n : Int) : Float32 := Float32.ofInt n
 def _root_.Int.toFloat64 (n : Int) : Float := Float.ofInt n
 
 -- IEEE 754 equality on infinities
